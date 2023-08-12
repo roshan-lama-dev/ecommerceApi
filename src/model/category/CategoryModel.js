@@ -13,5 +13,12 @@ export const deleteCategory = (_id) => {
 
 // get All the Category
 export const getCategories = () => {
-  return CategorySchema.find(0);
+  return CategorySchema.find();
+};
+
+// update
+// the updateObj is spread to entirely reomve the previous data
+
+export const updateCategory = ({ _id, ...updateObj }) => {
+  return CategorySchema.findByIdAndUpdate(_id.updateObj, { new: true });
 };
