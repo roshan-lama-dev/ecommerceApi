@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
 // TODO try and use gmail
-const emailProcessing = (emailContent) => {
+const emailProcessing = async (emailContent) => {
   try {
     // create a transport for (any email) SMTP configuration
     let transporter = nodemailer.createTransport({
@@ -13,9 +13,11 @@ const emailProcessing = (emailContent) => {
       },
     });
 
-    transporter.sendMail(emailContent);
+    const info = await transporter.sendMail(emailContent);
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   } catch (error) {
-    console.log(error);
+    console.log("from mailtransporter");
+    console.log(error.message);
   }
 };
 
@@ -24,30 +26,31 @@ const emailProcessing = (emailContent) => {
 // Also since we need the information of the users within the email content.$
 
 // accept the registered users email and fname, and the preview  as a parameter
-export const adminSignUpVerificationEmail = ({ email, fname }, url) => {
+export const adminSignUpVerificationEmail = ({ email, fName }, url) => {
+  console.log(email, fName);
   let info = {
     from: `"Register Form"  <${process.env.SMTP_USER}> `,
     to: email,
     subject: "Account Activation required",
-    text: `Hi ${fname}, please follow the link ${url} to verify your account.`,
+    text: `Hi ${fName}, please follow the link ${url} to verify your account.`,
     html: `
-    <p>Hi ${fName}</p>,
-    <br />
-    <br />
-    Please follow the link below to verify you account:
-    <br />
-    <br />
-<a href="${url}" style="color: red; font-weight: bolder;">Verify Now </a>
-<br />
-<br />
+      <p>Hi ${fName}</p>,
+      <br />
+      <br />
+      Please follow the link below to verify you account:
+      <br />
+      <br />
+  <a href="${url}" style="color: red; font-weight: bolder;">Verify Now </a>
+  <br />
+  <br />
 
-<p>
------------ <br />
-Customer care team <br />
-Coding Shop
-</p>
+  <p>
+  ----------- <br />
+  Customer care team <br />
+  Coding Shop
+  </p>
 
-`,
+  `,
   };
 
   emailProcessing(info);

@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import morgan from "morgan";
 import { dbConnect } from "./src/config/dbconfig.js";
-
+import AdminRouter from "./src/router/AdminRouter.js";
 const app = express();
 
 // Dynamic port for broadcasting
@@ -14,7 +14,16 @@ const PORT = process.env.PORT || 8080;
 // database connection
 dbConnect();
 
-app.use("/", (req, res) => {
+//middleware
+
+app.use(express.json());
+app.use(cors());
+app.use(morgan("dev"));
+
+// router
+app.use("/api/v1/admin", AdminRouter);
+
+app.use("*", (req, res) => {
   res.json({
     message: "You do not have access here",
   });

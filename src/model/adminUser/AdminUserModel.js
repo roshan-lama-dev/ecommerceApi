@@ -2,8 +2,8 @@ import AdminUserSchema from "./AdminUserSchema.js";
 
 // creating a new user/admin
 
-export const createUser = (userObj) => {
-  return AdminUserSchema(userObj).save();
+export const createUser = async (userObj) => {
+  return await AdminUserSchema(userObj).save();
 };
 
 // find user by filter (The filter parameter passed from the frontend must be an object)
